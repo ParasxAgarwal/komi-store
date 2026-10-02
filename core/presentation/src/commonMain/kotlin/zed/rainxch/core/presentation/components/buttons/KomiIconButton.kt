@@ -53,18 +53,6 @@ import kotlin.math.roundToInt
 
 private val MinTouchTarget = 44.dp
 
-/**
- * A highly customizable icon button component supporting multiple sizes, variants,
- * and visual personalities (e.g., Manga or Classic themes).
- *
- * @param icon The vector asset to display as the icon content.
- * @param contentDescription Description for accessibility screen readers.
- * @param onClick Lambda callback executed when the button is clicked.
- * @param modifier Optional Compose [Modifier] to configure layout behavior.
- * @param variant Visual button variant (Tonal, Primary, Outline, Text, or Destructive).
- * @param size Layout size variant of the button (Sm, Md, or Lg).
- * @param enabled Whether the button responds to click interactions.
- */
 @Composable
 fun KomiIconButton(
     icon: ImageVector,
