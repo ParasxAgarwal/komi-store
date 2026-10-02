@@ -174,7 +174,6 @@ private fun FeedScreen(
                         onClick = { onAction(FeedAction.OnToggleLayoutType) },
                         variant = KomiButtonVariant.Primary,
                         size = KomiIconButtonSize.Sm,
-                        modifier = Modifier.padding(end = 8.dp),
                     )
 
                     val platform = state.selectedPlatform
@@ -420,7 +419,7 @@ private fun BoxScope.FeedContent(
                                         onAction(FeedAction.OnMarkAsSeen(card.repository))
                                     }
                                 },
-                                feed = KomiRepoCardFeed.Release,
+                                feed = KomiRepoCardFeed.Plain,
                                 compact = true,
                                 modifier = Modifier.fillMaxWidth()
                                     .animateItem(),

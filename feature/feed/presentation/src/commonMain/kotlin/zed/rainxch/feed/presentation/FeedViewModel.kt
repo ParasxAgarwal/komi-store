@@ -90,6 +90,7 @@ class FeedViewModel(
                 observeSeenRepos()
                 observeHiddenRepos()
                 observeHideSeenEnabled()
+                observeFeedLayout()
                 observeBrowseFilter()
                 reload(isRefresh = false)
                 hasLoadedInitialData = true
@@ -133,10 +134,9 @@ class FeedViewModel(
             }
 
             FeedAction.OnToggleLayoutType -> {
-                _state.update {
-                    val nextType = if (it.layoutType == FeedLayoutType.LIST) FeedLayoutType.GRID else FeedLayoutType.LIST
-                    it.copy(layoutType = nextType)
-                }
+                val grid = _state.value.layoutType == FeedLayoutType.LIST
+                _state.update { it.copy(layoutType = if (grid) FeedLayoutType.GRID else FeedLayoutType.LIST) }
+                viewModelScope.launch { tweaksRepository.setRepoGridLayout(grid) }
             }
 
             is FeedAction.OnShareClick -> viewModelScope.launch {
@@ -367,6 +367,14 @@ class FeedViewModel(
             hiddenReposRepository.getAllHiddenRepoIds().collect { ids ->
                 hiddenIds = ids
                 rebuild()
+            }
+        }
+    }
+
+    private fun observeFeedLayout() {
+        viewModelScope.launch {
+            tweaksRepository.getRepoGridLayout().collect { grid ->
+                _state.update { it.copy(layoutType = if (grid) FeedLayoutType.GRID else FeedLayoutType.LIST) }
             }
         }
     }

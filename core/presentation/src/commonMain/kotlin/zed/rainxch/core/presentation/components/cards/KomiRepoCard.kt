@@ -143,15 +143,17 @@ fun KomiRepoCard(
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.weight(1f, fill = false),
                         )
-                        Diamond(color = colors.onSurfaceVariant)
-                        KomiText(
-                            text = language,
-                            role = KomiTextRole.Body,
-                            color = colors.onSurface,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.W800,
-                            maxLines = 1,
-                        )
+                        if (!compact) {
+                            Diamond(color = colors.onSurfaceVariant)
+                            KomiText(
+                                text = language,
+                                role = KomiTextRole.Body,
+                                color = colors.onSurface,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.W800,
+                                maxLines = 1,
+                            )
+                        }
                     }
                 }
                 CardBadge(
@@ -170,12 +172,29 @@ fun KomiRepoCard(
                 color = colors.onSurface,
                 fontSize = 13.5.sp,
                 fontWeight = FontWeight.W500,
-                maxLines = if (compact) 1 else 2,
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(top = gap),
             )
 
-            if (!compact && platforms.isNotEmpty()) {
+            if (compact && platforms.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.padding(top = gap),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    platforms.forEach { platform ->
+                        platform.toIcon()?.let { icon ->
+                            Icon(
+                                imageVector = icon,
+                                contentDescription = platform.toLabel(),
+                                modifier = Modifier.size(16.dp),
+                                tint = colors.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
+            } else if (platforms.isNotEmpty()) {
                 FlowRow(
                     modifier = Modifier.padding(top = gap),
                     horizontalArrangement = Arrangement.spacedBy(7.dp),
@@ -185,7 +204,7 @@ fun KomiRepoCard(
                         KomiChip(
                             label = platform.toLabel(),
                             kind = KomiChipKind.Info,
-                            size = if (compact) KomiChipSize.Sm else KomiChipSize.Md,
+                            size = KomiChipSize.Md,
                             leadingContent = {
                                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                     platform.toIcon()?.let { icon ->
